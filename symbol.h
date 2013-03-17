@@ -28,4 +28,17 @@ Symbol res[] = {
 	
 };
 
+bool isNum(const int c ){
+   return c >= '0' && c <= '9';
+}
+bool isAlpha(const int c ){
+   return ( ( c >= 'a' && c <= 'z' ) ||
+    ( c >= 'A' && c <= 'Z' ) );
+}
+
+ bool isAlphaNum( const int c ) {
+  return ( isNum( c ) || isAlpha( c ) || c == '_' );
+}
+
+
 #endif
