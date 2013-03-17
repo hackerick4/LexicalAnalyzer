@@ -11,7 +11,7 @@ class lexer
 private:
 	int currentLine;
 	void printInvalid_lexeme(string);
-	void findID(string &s);
+	void findIDAndNum(string &s);
 	void checkSymbol(string &s);
 	vector<int> validBit;
 public:

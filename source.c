@@ -1,3 +1,1 @@
-while(true != false) {
-	print ++a ^ 3;
-}
+_out = var1 + var2 *   var3;

@@ -36,9 +36,10 @@ void findLITERAL(string &s){
   cout << liter<<endl;
 }
 
-void lexer::findID(string &s){
+void lexer::findIDAndNum(string &s){
 	const char * c_s =s.c_str();
 	string outPut;
+	bool valid = true;
 	for ( size_t i = 0 ; i <= strlen(c_s);++i){
 		if (isAlpha(c_s[i])){
 			while(isAlphaNum(c_s[i])){ 
@@ -51,12 +52,23 @@ void lexer::findID(string &s){
 			
 			}
 		else if (isNum(c_s[i])){
+			
+			if (isAlpha(c_s[i+1])) {
+				valid = false;
+				while(isAlphaNum(c_s[i])){ 
+					outPut+=c_s[i];
+					++i;
+					validBit.push_back(i);
+				}
+			 cout <<"* Error: invalid lexeme " << outPut << " found at line"<< currentLine << endl;
+			}
 			while(isNum(c_s[i])){ 
 					outPut+=c_s[i];
 					++i;
 					validBit.push_back(i);
 				}
-			cout << "NUM : " <<outPut<<endl;
+			if (valid)cout << "NUM : " <<outPut<<endl;
+			valid = true;
 			outPut.clear();
 		}
 
@@ -73,11 +85,12 @@ void lexer::printInvalid_lexeme(string s){
   }
 }
 void lexer::analyze(string source){
+	validBit.clear();
   char * c_source = new char [source.length()+1];
     strncpy (c_source, source.c_str(),source.length()+1);
   findLITERAL(source);
   findSymbol(source);
-  findID(source);
+  findIDAndNum(source);
   source.erase(remove_if(source.begin(), source.end(), isspace), source.end());
- printInvalid_lexeme(source);
+  printInvalid_lexeme(source);
 }  

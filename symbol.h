@@ -33,7 +33,7 @@ bool isNum(const int c ){
 }
 bool isAlpha(const int c ){
    return ( ( c >= 'a' && c <= 'z' ) ||
-    ( c >= 'A' && c <= 'Z' ) );
+    ( c >= 'A' && c <= 'Z' )||  c == '_');
 }
 
  bool isAlphaNum( const int c ) {
