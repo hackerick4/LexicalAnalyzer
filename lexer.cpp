@@ -3,15 +3,6 @@
 #include <locale>
 #include <iostream>
 #include <algorithm>
-lexer::lexer(void)
-{
-}
-
-
-lexer::~lexer(void)
-{
-}
-
 void lexer::setCurrentLine(int line){
 	currentLine=line;
 }
@@ -20,14 +11,14 @@ bool isNum(const int c ){
 }
 bool isAlpha(const int c ){
 	 return ( ( c >= 'a' && c <= 'z' ) ||
-    ( c >= 'A' && c <= 'Z' ) );
+    ( c >= 'A' && c <= 'Z' )|| c == '_' );
 }
 
  bool isAlphaNum( const int c ) {
   return ( isNum( c ) || isAlpha( c ) || c == '_' );
 }
 
-void findSymbol(string &s){
+void lexer::checkSymbol(string &s){
 	int found = -1;
 	for (size_t i = 0 ; i < sizeof (res) / sizeof (Symbol);++i){
 	    found = s.find( res[i].str);
@@ -35,8 +26,17 @@ void findSymbol(string &s){
 			cout << res[i].type << ":" <<  res[i].str<<endl;
 		    s.erase(found,strlen(res[i].str));
 		}
-		 if (found!=std::string::npos) --i;
+		else if (found!=std::string::npos) --i;
 	}
+}
+
+bool isSymbol(string &s){
+	int found;
+	for (size_t i = 0 ; i < sizeof (res) / sizeof (Symbol);++i){
+		if (strcmp (s.c_str(),res[i].str)==0) return true;
+		//found = s.find( res[i].str);
+	}
+	return false;
 }
 
 void findLITERAL(string &s){
@@ -55,23 +55,7 @@ void findLITERAL(string &s){
 	cout << liter<<endl;
 }
 
-void findID(string &s){
-	unsigned i =0;
-	const char *id= s.c_str();
-    string ID;
-	string::iterator it;
-	for (size_t i = 0 ; i <s.length()+1;++i){
-		if (isAlphaNum( id[i] )  ) {
-			ID+=id[i];
-		}
-		else if (ID.length()){
-			cout << "ID : " << ID << endl;
-			unsigned pos = s.find(ID);
-			s.erase(pos,ID.length()+1);
-			i=0;
-            ID.clear();
-		}  }
-}
+
 void lexer::printInvalid_lexeme(string s){
 	char *blank= " ";
 	for ( string::iterator it = s.begin(); it!=s.end();++it){
@@ -83,11 +67,34 @@ void lexer::printInvalid_lexeme(string s){
 
 }
 void lexer::analyze(string source){
-	char * c_source = new char [source.length()+1];
-    strncpy (c_source, source.c_str(),source.length()+1);
 	findLITERAL(source);
-	findSymbol(source);
-	findID(source);
-	source.erase(remove_if(source.begin(), source.end(), isspace), source.end());
-	printInvalid_lexeme(source);
-}	
+	const char * c_s =source.c_str();
+	string outPut;
+	for ( size_t i = 0 ; i <= strlen(c_s);++i){
+		if (isAlpha(c_s[i])){
+			while(isAlphaNum(c_s[i])){ 
+					outPut+=c_s[i];
+					++i;
+					validBit.push_back(i);
+				}
+			if (!isSymbol(outPut)){
+				cout << "ID : " <<outPut<<endl;
+				outPut.clear();
+			}
+			else outPut.clear();
+			continue;
+			}
+		else if (isNum(c_s[i])){
+			while(isNum(c_s[i])){ 
+					outPut+=c_s[i];
+					++i;
+					validBit.push_back(i);
+				}
+			cout << "NUM : " <<outPut<<endl;
+			outPut.clear();
+		}
+		else checkSymbol(source);
+	}
+//	cout << source << endl;
+}
+	
