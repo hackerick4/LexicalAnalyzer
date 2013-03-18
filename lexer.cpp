@@ -12,13 +12,13 @@ void findSymbol(string &s){
   int found = -1;
   for (size_t i = 0 ; i < sizeof (res) / sizeof (Symbol);++i){
       found = s.find( res[i].str);
-    if(found>=0) {
-      cout << res[i].type << ":" <<  res[i].str<<endl;
-        s.erase(found,strlen(res[i].str));
-    }
-     if (found!=std::string::npos) --i;
-  }
-}
+	  if(found>=0 ) {
+		  if (found + strlen(res [ i ].str)<s.length() && isAlphaNum(s[ found + strlen(res [i ].str) ]) && isAlphaNum(s [found])) {
+			  continue;//cout << "////"<<s[found + strlen(res [i ].str) ]<<endl;
+		  }
+	      cout << res[i].type << ":" <<  res[i].str<<endl;
+          s.replace(found,strlen(res[i].str)," ");
+    } if (found!=std::string::npos) --i;}}
 
 void findLITERAL(string &s){
  int pairs = -1 , from=-1 , to=-1;
@@ -40,32 +40,28 @@ void lexer::findIDAndNum(string &s){
 	const char * c_s =s.c_str();
 	string outPut;
 	bool valid = true;
-	for ( size_t i = 0 ; i <= strlen(c_s);++i){
-		if (isAlpha(c_s[i])){
-			while(isAlphaNum(c_s[i])){ 
-					outPut+=c_s[i];
-					++i;
-					validBit.push_back(i);
+	for (  string::iterator it = s.begin(); it!=s.end();++it){
+		if (isAlpha(*it)){
+			while(isAlphaNum(*it)){ 
+					outPut+=*it;
+					++it;
 				}
 			    cout << "ID : " <<outPut<<endl;
 				outPut.clear();
 			
 			}
-		else if (isNum(c_s[i])){
-			
-			if (isAlpha(c_s[i+1])) {
+		else if (isNum(*it)){
+			if (isAlpha(*(it+1))) {
 				valid = false;
-				while(isAlphaNum(c_s[i])){ 
-					outPut+=c_s[i];
-					++i;
-					validBit.push_back(i);
+				while(isAlphaNum(*it)){ 
+					outPut+=*it;
+					++it;
 				}
 			 cout <<"* Error: invalid lexeme " << outPut << " found at line"<< currentLine << endl;
 			}
-			while(isNum(c_s[i])){ 
-					outPut+=c_s[i];
-					++i;
-					validBit.push_back(i);
+			while(isNum(*it)){ 
+					outPut+=*it;
+					++it;
 				}
 			if (valid)cout << "NUM : " <<outPut<<endl;
 			valid = true;
@@ -85,9 +81,7 @@ void lexer::printInvalid_lexeme(string s){
   }
 }
 void lexer::analyze(string source){
-	validBit.clear();
-  char * c_source = new char [source.length()+1];
-    strncpy (c_source, source.c_str(),source.length()+1);
+
   findLITERAL(source);
   findSymbol(source);
   findIDAndNum(source);

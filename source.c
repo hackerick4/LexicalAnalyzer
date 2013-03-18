@@ -1,1 +1,1 @@
-_out = var1 + var2 *   var3;
+out = var1 + var2 *   var3;
