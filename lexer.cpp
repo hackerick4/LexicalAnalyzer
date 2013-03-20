@@ -42,9 +42,13 @@ int lexer::getToken_AlphaStart(string s){
 int lexer::getToken_NumStart(string s){
 	string check;
 	string::iterator it;
-	for ( it = s.begin() ; isNum(*(it))&&(it)!=s.end() ; ++it)
+	bool valid = true;
+	for ( it = s.begin() ; it!=s.end()&& isAlphaNum(*it) ; ++it)
 		check+=*it;
-	cout <<"NUM, " << check  << endl;
+	for (string::iterator it = check.begin() ; it!=check.end() ; ++it)
+		if (isAlpha(*it)) {valid=false; break;}
+	if (valid)cout <<"NUM, " << check  << endl;
+	else cout <<"* Error: invalid lexeme " << check << " found at line"<< currentLine << endl;
 	return distance(s.begin(),it);
 }
 

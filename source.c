@@ -1,1 +1,3 @@
-printf("hello, world.\n");
+while(true != false) {
+	print ++3a ^ 3;
+}
