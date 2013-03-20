@@ -6,7 +6,7 @@
 void lexer::setCurrentLine(int line){
   currentLine=line;
 }
-int findLITERAL(string s){
+int lexer::findLITERAL(string s){
 	 int pairs = -1;
 	 string liter;
 	 string::iterator it = s.begin();
@@ -18,21 +18,22 @@ int findLITERAL(string s){
 	 cout<<"LITERAL," << liter<<endl;
 	 return distance(s.begin(),it);
 }
-bool isSymbol(string s){
+bool lexer::isSymbol(string s){
 for (size_t i = 0 ; i < sizeof (res) / sizeof (Symbol);++i){
 	int found = s.find( res[i].str);
 	  if(found>=0 )   {
 		  cout << res[i].type << ", " <<  res[i].str<<endl;
-		return true;
+		  isSymbol(s.substr(found+res[i].str.length(),string::npos));
+		  return true;
 	  }
 }
 	return false;
 }
 
-int getToken_AlphaStart(string s){
+int lexer::getToken_AlphaStart(string s){
 	string check;
 	string::iterator it;
-	for ( it = s.begin() ; isAlphaNum(*(it))&&it!=s.end() ; ++it)
+	for ( it = s.begin() ; it!=s.end()&&isAlphaNum(*it) ; ++it)
 		check+=*it;
 	if (! isSymbol(check)) cout<<"ID, "<<check<<endl ;
 	return distance(s.begin(),it);

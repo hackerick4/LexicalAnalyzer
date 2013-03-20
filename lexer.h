@@ -12,6 +12,9 @@ private:
 	string source;
 	int getToken_NumStart(string s);
 	int getToken_OtherStart(string s);
+	int findLITERAL (string s);
+	bool isSymbol(string s);
+	int getToken_AlphaStart(string s);
 public:
 	void setCurrentLine(int);
 	void analyze(string s);
