@@ -12,7 +12,7 @@ int main (){
 	 lexer lex ;
 	 fin.open("source.c");
 	 string readIn;
-	 int line=1;
+	 unsigned int line=1;
      while (getline(fin,readIn)){
 		 lex.setCurrentLine(line);
 		lex.analyze(readIn);

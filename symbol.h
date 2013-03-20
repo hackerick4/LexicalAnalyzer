@@ -1,8 +1,8 @@
 #ifndef SYMBOL
 #define SYMBOL
 struct Symbol {
-  char * str;
-  char * type;
+  string str;
+  string type;
 };
 
 Symbol res[] = {
@@ -18,12 +18,12 @@ Symbol res[] = {
 	{"-","SUB"}, 
 	{"*","MUL"}, 
 	{"/","DIV"},
-	{"<","COMP"}, 
-	{"<=","COMP"}, 
-	{">","COMP"}, 
+	{"<=","COMP"},
 	{">=","COMP"}, 
 	{"!=","COMP"}, 
-	{"==","COMP"}, 
+	{"==","COMP"},
+	{"<","COMP"}, 
+	{">","COMP"}, 
 	{"=","ASSIGN"}, 
 	
 };

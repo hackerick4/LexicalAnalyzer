@@ -1,90 +1,72 @@
 #include "lexer.h"
 #include "symbol.h"
-#include <locale>
 #include <iostream>
-#include <algorithm>
+#include <string.h>
 
 void lexer::setCurrentLine(int line){
   currentLine=line;
 }
-
-void findSymbol(string &s){
-  int found = -1;
-  for (size_t i = 0 ; i < sizeof (res) / sizeof (Symbol);++i){
-      found = s.find( res[i].str);
-	  if(found>=0 ) {
-		  if (found + strlen(res [ i ].str)<s.length() && isAlphaNum(s[ found + strlen(res [i ].str) ]) && isAlphaNum(s [found])) {
-			  continue;//cout << "////"<<s[found + strlen(res [i ].str) ]<<endl;
-		  }
-	      cout << res[i].type << ":" <<  res[i].str<<endl;
-          s.replace(found,strlen(res[i].str)," ");
-    } if (found!=std::string::npos) --i;}}
-
-void findLITERAL(string &s){
- int pairs = -1 , from=-1 , to=-1;
-  string liter;
-  for (size_t i = 0 ; i <s.length() ; ++i){
-     if (s.at(i)=='"' ){ //"findLITERAL"!!
-       if (pairs==-1){cout <<"LITERAL : "; from = i;} 
-      pairs*=-1;
-      to = i;
-    }
-  }
-  if (from==-1) return;
-  liter = s.substr(from,to-from+1);
-  s.erase(from,to-from+1);
-  cout << liter<<endl;
+int findLITERAL(string s){
+	 int pairs = -1;
+	 string liter;
+	 string::iterator it = s.begin();
+	 do{
+		 liter+=*it;
+		 if (*it=='"') pairs*=-1;
+			++it;
+	 }while (pairs==1);
+	 cout<<"LITERAL," << liter<<endl;
+	 return distance(s.begin(),it);
+}
+bool isSymbol(string s){
+for (size_t i = 0 ; i < sizeof (res) / sizeof (Symbol);++i){
+	int found = s.find( res[i].str);
+	  if(found>=0 )   {
+		  cout << res[i].type << ", " <<  res[i].str<<endl;
+		return true;
+	  }
+}
+	return false;
 }
 
-void lexer::findIDAndNum(string &s){
-	const char * c_s =s.c_str();
-	string outPut;
-	bool valid = true;
-	for (  string::iterator it = s.begin(); it!=s.end();++it){
-		if (isAlpha(*it)){
-			while(isAlphaNum(*it)){ 
-					outPut+=*it;
-					++it;
-				}
-			    cout << "ID : " <<outPut<<endl;
-				outPut.clear();
-			
-			}
-		else if (isNum(*it)){
-			if (isAlpha(*(it+1))) {
-				valid = false;
-				while(isAlphaNum(*it)){ 
-					outPut+=*it;
-					++it;
-				}
-			 cout <<"* Error: invalid lexeme " << outPut << " found at line"<< currentLine << endl;
-			}
-			while(isNum(*it)){ 
-					outPut+=*it;
-					++it;
-				}
-			if (valid)cout << "NUM : " <<outPut<<endl;
-			valid = true;
-			outPut.clear();
+int getToken_AlphaStart(string s){
+	string check;
+	string::iterator it;
+	for ( it = s.begin() ; isAlphaNum(*(it))&&it!=s.end() ; ++it)
+		check+=*it;
+	if (! isSymbol(check)) cout<<"ID, "<<check<<endl ;
+	return distance(s.begin(),it);
+}
+
+int lexer::getToken_NumStart(string s){
+	string check;
+	string::iterator it;
+	for ( it = s.begin() ; isNum(*(it))&&(it)!=s.end() ; ++it)
+		check+=*it;
+	cout <<"NUM, " << check  << endl;
+	return distance(s.begin(),it);
+}
+
+int lexer::getToken_OtherStart(string s){
+	string check;
+	string::iterator it;
+	if (s[0] == '"') return findLITERAL(s);
+	for ( it = s.begin() ; it!=s.end()&&!isAlphaNum(*it)&&!isspace(*it)&&*it!='"' ; ++it){
+		check+=*it;
 		}
+    if (! isSymbol(check)) cout <<"* Error: invalid lexeme " << check << " found at line"<< currentLine << endl;
+	return distance(s.begin(),it);
+}
 
+void lexer::analyze(string input){
+	source.assign(input);
+	for (string::iterator source_it = source.begin(); source_it!=source.end();){
+		if (isspace(*source_it)) ++source_it;
+		else if (isAlpha(*source_it)) 
+			source_it+= getToken_AlphaStart(source.substr( distance(source.begin(),source_it) , string::npos ));
+		else if (isNum(*source_it)) 
+			source_it+= getToken_NumStart(source.substr( distance(source.begin(),source_it) , string::npos ));
+		else //NOT alphabet OR Number
+			source_it+= getToken_OtherStart(source.substr( distance(source.begin(),source_it) , string::npos ));
 	}
- 
-}
-void lexer::printInvalid_lexeme(string s){
-  char *blank= " ";
-  for ( string::iterator it = s.begin(); it!=s.end();++it){
-    if (*it != *blank && !isAlphaNum(*it)){ 
-      cout <<"* Error: invalid lexeme " << *it << " found at line"<< currentLine << endl;
-      break;
-      }
-  }
-}
-void lexer::analyze(string source){
-
-  findLITERAL(source);
-  findSymbol(source);
-  findIDAndNum(source);
-  source.erase(remove_if(source.begin(), source.end(), isspace), source.end());
-  printInvalid_lexeme(source);
 }  
