@@ -1,6 +1,5 @@
 #ifndef LEXER 
 #define LEXER
-#pragma once
 #include <string>
 #include <iostream>
 

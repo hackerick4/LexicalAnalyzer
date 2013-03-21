@@ -1,5 +1,6 @@
 #ifndef SYMBOL
 #define SYMBOL
+
 struct Symbol {
   std::string str;
   std::string type;

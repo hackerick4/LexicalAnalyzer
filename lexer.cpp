@@ -13,6 +13,7 @@ int lexer::findLITERAL(std::string s){
 	 std::cout<<"LITERAL," << liter<<std::endl;
 	 return distance(s.begin(),it);
 }
+
 bool lexer::isSymbol(std::string s){
 for (size_t i = 0 ; i < sizeof (res) / sizeof (Symbol);++i){
 	int found = s.find( res[i].str);
@@ -60,11 +61,12 @@ int lexer::getToken_OtherStart(std::string s){
 
 void lexer::analyze(std::string input){
 	source.assign(input);
-	for (std::string::iterator source_it = source.begin(); source_it!=source.end();){
-		if (isspace(*source_it)) ++source_it;
-		else if (isAlpha(*source_it)) 
+	
+	for (auto source_it = source.begin(); source_it!=source.end();){
+		if (isspace(*source_it)) ++source_it; //ignore the space
+		else if (isAlpha(*source_it)) //Begin with a Alphabet
 			source_it+= getToken_AlphaStart(source.substr( distance(source.begin(),source_it) , std::string::npos ));
-		else if (isNum(*source_it)) 
+		else if (isNum(*source_it)) //Begin with a number
 			source_it+= getToken_NumStart(source.substr( distance(source.begin(),source_it) , std::string::npos ));
 		else //NOT alphabet OR Number
 			source_it+= getToken_OtherStart(source.substr( distance(source.begin(),source_it) , std::string::npos ));
