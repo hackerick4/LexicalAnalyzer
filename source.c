@@ -1,3 +1,5 @@
+printf("hello, world.\n");
+out = var1 + var2 *   var3;
 while(true != false) {
-	print ++3a ^ 3;
+	print ++a ^ 3;
 }

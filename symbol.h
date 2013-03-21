@@ -1,10 +1,9 @@
 #ifndef SYMBOL
 #define SYMBOL
 struct Symbol {
-  string str;
-  string type;
+  std::string str;
+  std::string type;
 };
-
 Symbol res[] = {
 	{"if", "IF"} , 
 	{"while", "WHILE"},
@@ -25,9 +24,5 @@ Symbol res[] = {
 	{"<","COMP"}, 
 	{">","COMP"}, 
 	{"=","ASSIGN"}, 
-	
-};
-
-
-
+	};
 #endif

@@ -1,19 +1,15 @@
-#include<iostream>
 #include <fstream>
 #include <string>
 #include <conio.h>
 #include "lexer.h"
 
-using namespace std;
-
-
 int main (){
-	 ifstream fin;
+	 std::ifstream fin;
 	 lexer lex ;
 	 fin.open("source.c");
-	 string readIn;
+	 std:: string readIn;
 	 unsigned int line=1;
-     while (getline(fin,readIn)){
+     while (std::getline(fin,readIn)){
 		 lex.setCurrentLine(line);
 		lex.analyze(readIn);
 		++line;
