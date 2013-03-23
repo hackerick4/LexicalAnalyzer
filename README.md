@@ -1,3 +1,3 @@
-LexicalAnalyzer
+LexicalAnalyzer ヽ(́◕◞౪◟◕‵)ﾉ
 ===============
-***ヽ(́◕◞౪◟◕‵)ﾉ***
+
